@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '../components/LoginPage.vue'
 
 const routes = [
   {
     path: '/',
+    redirect: { name: 'login' },
+  },
+  {
+    path: '/login',
     name: 'login',
-    component: LoginPage,
-    alias: ['/login'],
+    component: () => import('../components/LoginPage.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
