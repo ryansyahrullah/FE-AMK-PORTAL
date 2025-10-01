@@ -69,3 +69,11 @@ Untuk menyalin kode secara manual:
 4. Simpan perubahan, lalu jalankan `npm run dev` atau `npm run build` untuk memastikan aplikasi berjalan.
 
 Dengan cara ini kamu bisa menyalin berkas lengkap tanpa kebingungan dengan tanda `+` di awal baris.
+
+## Di mana mengubah halaman login
+
+- **Tampilan utama berada di** `src/components/LoginPage.vue`. Komponen ini memuat struktur form, teks sambutan, dan penjelasan di panel samping. Kamu bisa menyesuaikan judul, warna, maupun teks promosi pada bagian `<template>` ataupun mengganti aturan gaya di blok `<style scoped>`.
+- **Rute default berada di** `src/router/index.js`. Jika suatu saat ingin menambahkan halaman lain, tambahkan rute baru di file ini dan pertahankan rute `/` agar tetap mengarah ke halaman login.
+- **Shell aplikasi berada di** `src/App.vue`. Saat ini isinya hanya `<RouterView />`, sehingga rute yang aktif (login) akan langsung dirender. Kalau kamu menambahkan layout global, lakukan di sini.
+
+Setelah membuat perubahan, jalankan `npm run dev` dan akses alamat yang ditampilkan (biasanya `http://localhost:5173/`). Kamu akan langsung melihat versi terbaru dari halaman login.
