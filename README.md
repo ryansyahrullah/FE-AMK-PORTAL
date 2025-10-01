@@ -36,3 +36,18 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Menyalin perubahan dari commit ini
+
+Jika kamu melihat berkas yang kutambahkan melalui tampilan _diff_ (misalnya di GitHub atau GitLab), baris-baris baru biasanya memiliki tanda `+` di bagian paling kiri. Tanda tersebut hanya penanda perubahan dan **tidak** perlu disalin ke editor.
+
+Untuk menyalin kode secara manual:
+
+1. Buka berkas tujuan di editor lokalmu.
+2. Salin bagian kode dari tampilan _diff_ **tanpa** karakter `+` di awal baris.
+3. Tempelkan kode tersebut menggantikan isi berkas lama. Misalnya:
+   - Ganti isi `src/App.vue` sehingga hanya merender komponen `LoginPage`.
+   - Tambahkan berkas baru `src/components/LoginPage.vue` dan salin seluruh isi komponen login dari _diff_.
+4. Simpan perubahan, lalu jalankan `npm run dev` atau `npm run build` untuk memastikan aplikasi berjalan.
+
+Dengan cara ini kamu bisa menyalin berkas lengkap tanpa kebingungan dengan tanda `+` di awal baris.
