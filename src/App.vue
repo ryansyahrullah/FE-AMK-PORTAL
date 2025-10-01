@@ -1,19 +1,7 @@
 <script setup>
-import LoginPage from './components/LoginPage.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <LoginPage />
+  <RouterView />
 </template>
-
-<style>
-:root {
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #0f172a;
-  background-color: #f1f5f9;
-}
-
-body {
-  margin: 0;
-}
-</style>

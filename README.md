@@ -46,8 +46,9 @@ Untuk menyalin kode secara manual:
 1. Buka berkas tujuan di editor lokalmu.
 2. Salin bagian kode dari tampilan _diff_ **tanpa** karakter `+` di awal baris.
 3. Tempelkan kode tersebut menggantikan isi berkas lama. Misalnya:
-   - Ganti isi `src/App.vue` sehingga hanya merender komponen `LoginPage`.
-   - Tambahkan berkas baru `src/components/LoginPage.vue` dan salin seluruh isi komponen login dari _diff_.
+   - Ganti isi `src/App.vue` sehingga hanya merender `<RouterView />` dari Vue Router.
+   - Tambahkan berkas baru `src/router/index.js` untuk mendaftarkan rute utama `/` yang mengarah ke `LoginPage`.
+   - Tambahkan berkas `src/components/LoginPage.vue` dan salin seluruh isi komponen login dari _diff_.
 4. Simpan perubahan, lalu jalankan `npm run dev` atau `npm run build` untuk memastikan aplikasi berjalan.
 
 Dengan cara ini kamu bisa menyalin berkas lengkap tanpa kebingungan dengan tanda `+` di awal baris.
