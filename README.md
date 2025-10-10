@@ -32,10 +32,10 @@ npm run dev
 ```
 
 Setelah perintah tersebut berjalan, Vite akan menampilkan alamat lokal (biasanya
-`http://localhost:5173/`). Buka alamat itu di browser; halaman login langsung
-muncul karena rute utama (`/`) merender `LoginPage`. Jika ingin memastikan, kamu
-juga bisa membuka `http://localhost:5173/login`—jalur tersebut adalah alias dari
-halaman yang sama.
+`http://localhost:5173/`). Buka alamat itu di browser; kamu akan langsung
+dialihkan ke `/login` yang memuat `LoginPage`, sehingga halaman login menjadi
+landing page default. Kamu juga bisa membuka `http://localhost:5173/login`
+secara eksplisit—alamat tersebut menampilkan layar yang sama.
 
 ### Compile and Minify for Production
 
@@ -50,9 +50,9 @@ npm run preview
 ```
 
 Perintah `preview` akan menyalakan server sementara di alamat yang umumnya
-`http://localhost:4173/`. Sama seperti saat `npm run dev`, kamu bisa membuka
-akar situs (`/`) atau langsung `http://localhost:4173/login`; keduanya merender
-halaman login yang sama karena `/login` hanyalah alias.
+`http://localhost:4173/`. Sama seperti saat `npm run dev`, membuka akar situs
+(`http://localhost:4173/`) akan otomatis mengalihkanmu ke `/login`, dan kamu
+selalu bisa menavigasi langsung ke `http://localhost:4173/login` juga.
 
 ## Menyalin perubahan dari commit ini
 
@@ -64,7 +64,7 @@ Untuk menyalin kode secara manual:
 2. Salin bagian kode dari tampilan _diff_ **tanpa** karakter `+` di awal baris.
 3. Tempelkan kode tersebut menggantikan isi berkas lama. Misalnya:
    - Ganti isi `src/App.vue` sehingga hanya merender `<RouterView />` dari Vue Router.
-   - Tambahkan berkas baru `src/router/index.js` untuk mendaftarkan rute utama `/` (dengan alias `/login`) yang mengarah ke `LoginPage`.
+   - Tambahkan berkas baru `src/router/index.js` untuk mendaftarkan rute `/login` sebagai tampilan utama dan mengalihkan rute akar ke sana.
    - Tambahkan berkas `src/components/LoginPage.vue` dan salin seluruh isi komponen login dari _diff_.
 4. Simpan perubahan, lalu jalankan `npm run dev` atau `npm run build` untuk memastikan aplikasi berjalan.
 

@@ -1,22 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginPage from '../components/LoginPage.vue'
+
+const LoginPage = () => import('../components/LoginPage.vue')
 
 const routes = [
   {
     path: '/',
+    redirect: { name: 'login' },
+  },
+  {
+    path: '/login',
     name: 'login',
     component: LoginPage,
-    alias: ['/login'],
   },
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/',
+    redirect: { name: 'login' },
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior: () => ({ top: 0 }),
 })
 
 export default router
