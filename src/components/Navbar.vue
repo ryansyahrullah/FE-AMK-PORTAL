@@ -1,0 +1,79 @@
+<template>
+  <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-6">
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 lg:hidden"
+        @click="$emit('toggle-sidebar')"
+        aria-label="Buka navigasi"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+      <div class="text-lg font-semibold text-slate-800 dark:text-slate-100">
+        Portal AMK
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <button
+        type="button"
+        class="hidden rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 lg:inline-flex"
+        @click="toggleTheme"
+      >
+        <span v-if="isDark">Mode Terang</span>
+        <span v-else>Mode Gelap</span>
+      </button>
+      <div class="flex items-center gap-3 rounded-full border border-transparent bg-slate-100 px-3 py-1 dark:bg-slate-800">
+        <div class="hidden text-right text-sm lg:block">
+          <p class="font-semibold">{{ user?.nama ?? 'Administrator' }}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">{{ user?.role ?? 'admin' }}</p>
+        </div>
+        <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white uppercase">
+          {{ inisialUser }}
+        </div>
+        <button
+          type="button"
+          class="ml-2 inline-flex items-center rounded-md border border-transparent bg-primary px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-primary-dark"
+          @click="handleLogout"
+        >
+          Keluar
+        </button>
+      </div>
+    </div>
+  </header>
+</template>
+
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { useAuthStore } from '../stores/auth';
+
+const auth = useAuthStore();
+const user = computed(() => auth.state.value.user);
+
+const inisialUser = computed(() => {
+  if (!user.value) return 'AD';
+  return user.value.nama
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+});
+
+const isDark = ref(false);
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value;
+  document.documentElement.classList.toggle('dark', isDark.value);
+};
+
+onMounted(() => {
+  isDark.value = document.documentElement.classList.contains('dark');
+});
+
+const handleLogout = async () => {
+  await auth.logout();
+  window.location.href = '/login';
+};
+</script>
