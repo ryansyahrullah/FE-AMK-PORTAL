@@ -81,11 +81,11 @@
             />
             <p v-if="errors.password" class="mt-1 text-xs text-rose-300">{{ errors.password }}</p>
           </div>
-          <Button type="submit" class="w-full justify-center" :loading="auth.state.value.loading">
+          <Button type="submit" class="w-full justify-center" :loading="auth.state.loading">
             Masuk Sekarang
           </Button>
-          <p v-if="auth.state.value.error" class="rounded-2xl border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-center text-sm text-rose-200">
-            {{ auth.state.value.error }}
+          <p v-if="auth.state.error" class="rounded-2xl border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-center text-sm text-rose-200">
+            {{ auth.state.error }}
           </p>
         </form>
       </div>

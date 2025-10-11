@@ -49,7 +49,7 @@ import { computed, onMounted, ref } from 'vue';
 import { useAuthStore } from '../stores/auth';
 
 const auth = useAuthStore();
-const user = computed(() => auth.state.value.user);
+const user = computed(() => auth.state.user);
 
 const inisialUser = computed(() => {
   if (!user.value) return 'AD';

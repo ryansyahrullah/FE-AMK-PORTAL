@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, reactive } from 'vue';
 import http from '../api/http';
 import type { AuthResponse, LoginPayload, User } from '../types';
 
@@ -14,7 +14,7 @@ const storageKeyToken = 'amk_token';
 const storageKeyUser = 'amk_user';
 
 export const useAuthStore = defineStore('auth', () => {
-  const state = ref<AuthState>({
+  const state = reactive<AuthState>({
     user: null,
     token: null,
     loading: false,
@@ -25,22 +25,22 @@ export const useAuthStore = defineStore('auth', () => {
   const storedUser = localStorage.getItem(storageKeyUser);
 
   if (storedToken) {
-    state.value.token = storedToken;
+    state.token = storedToken;
   }
   if (storedUser) {
     try {
-      state.value.user = JSON.parse(storedUser) as User;
+      state.user = JSON.parse(storedUser) as User;
     } catch (error) {
       console.error('Gagal mengurai data pengguna dari localStorage', error);
       localStorage.removeItem(storageKeyUser);
     }
   }
 
-  const isAuthenticated = computed(() => Boolean(state.value.token));
+  const isAuthenticated = computed(() => Boolean(state.token));
 
   const login = async (payload: LoginPayload) => {
-    state.value.loading = true;
-    state.value.error = null;
+    state.loading = true;
+    state.error = null;
 
     try {
       const credentials = {
@@ -48,17 +48,17 @@ export const useAuthStore = defineStore('auth', () => {
         nrp: payload.nrp.trim().toLowerCase()
       };
       const { data } = await http.post<AuthResponse>('/api/login', credentials);
-      state.value.user = data.user;
-      state.value.token = data.token;
+      state.user = data.user;
+      state.token = data.token;
       localStorage.setItem(storageKeyToken, data.token);
       localStorage.setItem(storageKeyUser, JSON.stringify(data.user));
       return data;
     } catch (error: any) {
       const message = error.response?.data?.message || 'Terjadi kesalahan saat masuk.';
-      state.value.error = message;
+      state.error = message;
       throw new Error(message);
     } finally {
-      state.value.loading = false;
+      state.loading = false;
     }
   };
 
@@ -70,8 +70,8 @@ export const useAuthStore = defineStore('auth', () => {
     } finally {
       localStorage.removeItem(storageKeyToken);
       localStorage.removeItem(storageKeyUser);
-      state.value.user = null;
-      state.value.token = null;
+      state.user = null;
+      state.token = null;
     }
   };
 
