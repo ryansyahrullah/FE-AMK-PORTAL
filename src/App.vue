@@ -1,47 +1,42 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="flex h-screen bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <Sidebar
+      :collapsed="isSidebarCollapsed"
+      :mobile-open="isSidebarOpenMobile"
+      @close-mobile="isSidebarOpenMobile = false"
+      @toggle-collapse="toggleSidebar"
+    />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <div class="flex flex-1 flex-col overflow-hidden">
+      <Navbar
+        :sidebar-collapsed="isSidebarCollapsed"
+        @toggle-sidebar="handleToggleSidebar"
+      />
+      <main class="flex-1 overflow-y-auto bg-slate-100 px-4 py-6 dark:bg-slate-900 sm:px-6 lg:px-8">
+        <RouterView />
+      </main>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script setup lang="ts">
+import { ref } from 'vue';
+import { RouterView } from 'vue-router';
+import Navbar from './components/Navbar.vue';
+import Sidebar from './components/Sidebar.vue';
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+const isSidebarCollapsed = ref(false);
+const isSidebarOpenMobile = ref(false);
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+const toggleSidebar = () => {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value;
+};
+
+const handleToggleSidebar = () => {
+  if (window.innerWidth < 1024) {
+    isSidebarOpenMobile.value = !isSidebarOpenMobile.value;
+  } else {
+    toggleSidebar();
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
+};
+</script>
