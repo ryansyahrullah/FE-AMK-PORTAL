@@ -142,13 +142,14 @@ const router = createRouter({
 
 router.beforeEach((to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const auth = useAuthStore();
+  const isAuthenticated = auth.isAuthenticated;
 
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+  if (to.meta.requiresAuth && !isAuthenticated) {
     next({ name: 'login', query: { redirect: to.fullPath } });
     return;
   }
 
-  if (to.meta.guestOnly && auth.isAuthenticated) {
+  if (to.meta.guestOnly && isAuthenticated) {
     next(auth.getDefaultRoute());
     return;
   }

@@ -53,7 +53,7 @@ const isGuestLayout = computed(() => {
   if (route.meta.layout === 'app') {
     return false;
   }
-  return !auth.isAuthenticated.value;
+  return !auth.isAuthenticated;
 });
 const contentOffsetClass = computed(() => (isSidebarCollapsed.value ? 'lg:pl-24' : 'lg:pl-72'));
 

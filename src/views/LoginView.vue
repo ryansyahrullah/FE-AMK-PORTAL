@@ -160,7 +160,7 @@ const onSubmit = async () => {
   }
 };
 
-if (auth.isAuthenticated.value) {
+if (auth.isAuthenticated) {
   router.replace(auth.getDefaultRoute());
 }
 </script>
