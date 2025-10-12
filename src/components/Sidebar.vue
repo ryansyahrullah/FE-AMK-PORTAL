@@ -141,7 +141,7 @@
           <transition name="accordion">
             <div
               v-if="isExpanded(item.id) && !collapsed"
-              class="ml-4 space-y-1 border-l border-slate-200 pl-4 dark:border-slate-800"
+              class="ml-4 mt-1.5 space-y-1 border-l border-slate-200 pl-4 dark:border-slate-800"
             >
               <RouterLink
                 v-for="child in item.children"
