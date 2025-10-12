@@ -31,16 +31,28 @@
       </section>
       <section class="rounded-3xl border border-slate-200/60 bg-white/90 p-8 shadow-xl backdrop-blur dark:border-slate-800/60 dark:bg-slate-900/80">
         <div class="mb-8">
-          <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Masuk Admin</h2>
-          <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Silakan masuk untuk membuka dashboard.</p>
-          <div class="mt-6 space-y-2 rounded-2xl border border-blue-100 bg-blue-50/80 p-4 text-sm text-slate-700 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-slate-200">
-            <div class="flex items-center justify-between">
-              <span>Email</span>
-              <span class="font-medium">admin@gmail.com</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span>Kata Sandi</span>
-              <span class="font-medium">admin123</span>
+          <h2 class="text-2xl font-semibold text-slate-900 dark:text-slate-100">Masuk ke Portal AMK</h2>
+          <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Pilih akun demo untuk melihat menu sesuai peran. Kredensial akan terisi otomatis saat Anda menekan tombol gunakan.
+          </p>
+          <div class="mt-6 space-y-3">
+            <div
+              v-for="account in demoAccounts"
+              :key="account.email"
+              class="flex items-center justify-between gap-3 rounded-2xl border border-blue-100/70 bg-blue-50/80 p-4 text-sm text-slate-700 transition hover:border-blue-200 hover:bg-white dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-slate-200"
+            >
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-300">{{ account.role }}</p>
+                <p class="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">{{ account.email }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Kata sandi: {{ account.password }}</p>
+              </div>
+              <button
+                type="button"
+                class="rounded-full border border-blue-400/40 px-3 py-1 text-xs font-semibold text-blue-700 transition hover:border-blue-500 hover:bg-blue-100 dark:border-blue-400/40 dark:text-blue-200 dark:hover:border-blue-300 dark:hover:bg-blue-500/20"
+                @click="fillCredential(account)"
+              >
+                Gunakan
+              </button>
             </div>
           </div>
         </div>
@@ -91,6 +103,12 @@ import Button from '../components/Button.vue';
 import ThemeToggle from '../components/ThemeToggle.vue';
 import { useAuthStore } from '../stores/auth';
 
+interface DemoAccount {
+  role: string;
+  email: string;
+  password: string;
+}
+
 const router = useRouter();
 const route = useRoute();
 const auth = useAuthStore();
@@ -104,6 +122,18 @@ const errors = reactive<{ nrp: string | null; password: string | null }>({
   nrp: null,
   password: null
 });
+
+const demoAccounts: DemoAccount[] = [
+  { role: 'Admin HCGS', email: 'admin@gmail.com', password: 'admin123' },
+  { role: 'Pegawai', email: 'pegawai@gmail.com', password: 'pegawai123' },
+  { role: 'Admin Finance', email: 'finance@gmail.com', password: 'finance123' },
+  { role: 'Officer Site', email: 'officer@gmail.com', password: 'officer123' }
+];
+
+const fillCredential = (account: DemoAccount) => {
+  form.nrp = account.email;
+  form.password = account.password;
+};
 
 const validate = () => {
   errors.nrp = !form.nrp
@@ -123,7 +153,7 @@ const onSubmit = async () => {
   if (!validate()) return;
   try {
     await auth.login({ ...form });
-    const redirect = (route.query.redirect as string) || '/dashboard';
+    const redirect = (route.query.redirect as string) || auth.getDefaultRoute();
     router.replace(redirect);
   } catch (error) {
     // pesan ditangani di store
@@ -131,6 +161,6 @@ const onSubmit = async () => {
 };
 
 if (auth.isAuthenticated.value) {
-  router.replace('/dashboard');
+  router.replace(auth.getDefaultRoute());
 }
 </script>

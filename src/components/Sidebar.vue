@@ -74,6 +74,22 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75h-9A2.25 2.25 0 0 0 5.25 6v12A2.25 2.25 0 0 0 7.5 20.25h9A2.25 2.25 0 0 0 18.75 18V6A2.25 2.25 0 0 0 16.5 3.75Z" />
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25h6M9 12h6M9 15.75h3" />
             </svg>
+            <svg v-else-if="item.icon === 'profile'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 20.25a7.5 7.5 0 0 1 15 0" />
+            </svg>
+            <svg v-else-if="item.icon === 'salary'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5.25h18v13.5H3z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 9h9m-9 3h9m-9 3h5.25" />
+            </svg>
+            <svg v-else-if="item.icon === 'finance'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 19.5h16.5M4.5 8.25h15L12 4.5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 11.25v5.25m4.5-5.25v5.25m4.5-5.25v5.25" />
+            </svg>
+            <svg v-else-if="item.icon === 'site'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 6.75h18M3 12h18M3 17.25h9" />
+              <circle cx="17" cy="17" r="2.25" />
+            </svg>
           </span>
           <span v-if="!collapsed">{{ item.label }}</span>
         </RouterLink>
@@ -184,11 +200,27 @@
                       <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 13.5 1.5-.75-1.5-.75" />
                       <circle cx="12" cy="12" r="3.75" />
                     </svg>
-                    <svg v-else-if="child.icon === 'contract'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75h-9A2.25 2.25 0 0 0 5.25 6v12A2.25 2.25 0 0 0 7.5 20.25h9A2.25 2.25 0 0 0 18.75 18V6A2.25 2.25 0 0 0 16.5 3.75Z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25h6M9 12h6M9 15.75h3" />
-                    </svg>
-                  </span>
+                <svg v-else-if="child.icon === 'contract'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.75h-9A2.25 2.25 0 0 0 5.25 6v12A2.25 2.25 0 0 0 7.5 20.25h9A2.25 2.25 0 0 0 18.75 18V6A2.25 2.25 0 0 0 16.5 3.75Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25h6M9 12h6M9 15.75h3" />
+                </svg>
+                <svg v-else-if="child.icon === 'profile'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 20.25a7.5 7.5 0 0 1 15 0" />
+                </svg>
+                <svg v-else-if="child.icon === 'salary'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 5.25h18v13.5H3z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 9h9m-9 3h9m-9 3h5.25" />
+                </svg>
+                <svg v-else-if="child.icon === 'finance'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 19.5h16.5M4.5 8.25h15L12 4.5z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 11.25v5.25m4.5-5.25v5.25m4.5-5.25v5.25" />
+                </svg>
+                <svg v-else-if="child.icon === 'site'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 6.75h18M3 12h18M3 17.25h9" />
+                  <circle cx="17" cy="17" r="2.25" />
+                </svg>
+              </span>
                   <span>{{ child.label }}</span>
                 </span>
               </RouterLink>
@@ -225,6 +257,7 @@
 import { computed, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
+import type { UserRole } from '../types';
 
 interface MenuChild {
   id: string;
@@ -243,7 +276,17 @@ interface MenuItem {
   exact?: boolean;
 }
 
-type IconName = 'dashboard' | 'pegawai' | 'list' | 'leave' | 'health' | 'contract';
+type IconName =
+  | 'dashboard'
+  | 'pegawai'
+  | 'list'
+  | 'leave'
+  | 'health'
+  | 'contract'
+  | 'profile'
+  | 'salary'
+  | 'finance'
+  | 'site';
 
 const props = defineProps<{
   collapsed: boolean;
@@ -258,48 +301,106 @@ const router = useRouter();
 const mobileOpen = computed(() => props.mobileOpen);
 const collapsed = computed(() => props.collapsed);
 
-const menuItems = computed<MenuItem[]>(() => [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    to: '/dashboard',
-    icon: 'dashboard',
-    exact: true
-  },
-  {
-    id: 'pegawai',
-    label: 'Kepegawaian',
-    to: '/pegawai',
-    icon: 'pegawai',
-    children: [
-      {
-        id: 'pegawai-data',
-        label: 'Data Pegawai',
-        to: '/pegawai',
-        icon: 'list',
-        exact: true
-      },
-      {
-        id: 'pegawai-cuti',
-        label: 'Pengajuan Cuti',
-        to: '/pegawai/pengajuan-cuti',
-        icon: 'leave'
-      },
-      {
-        id: 'pegawai-mcu',
-        label: 'Pengajuan MCU',
-        to: '/pegawai/pengajuan-mcu',
-        icon: 'health'
-      },
-      {
-        id: 'pegawai-kontrak',
-        label: 'Buat Kontrak',
-        to: '/pegawai/buat-kontrak',
-        icon: 'contract'
-      }
-    ]
-  }
-]);
+const menuByRole: Record<UserRole, MenuItem[]> = {
+  admin_hcgs: [
+    {
+      id: 'dashboard',
+      label: 'Dashboard',
+      to: '/dashboard',
+      icon: 'dashboard',
+      exact: true
+    },
+    {
+      id: 'pegawai',
+      label: 'Kepegawaian',
+      to: '/pegawai',
+      icon: 'pegawai',
+      children: [
+        {
+          id: 'pegawai-data',
+          label: 'Data Pegawai',
+          to: '/pegawai',
+          icon: 'list',
+          exact: true
+        },
+        {
+          id: 'pegawai-cuti',
+          label: 'Pengajuan Cuti',
+          to: '/pegawai/pengajuan-cuti',
+          icon: 'leave'
+        },
+        {
+          id: 'pegawai-mcu',
+          label: 'Pengajuan MCU',
+          to: '/pegawai/pengajuan-mcu',
+          icon: 'health'
+        },
+        {
+          id: 'pegawai-kontrak',
+          label: 'Buat Kontrak',
+          to: '/pegawai/buat-kontrak',
+          icon: 'contract'
+        }
+      ]
+    }
+  ],
+  pegawai: [
+    {
+      id: 'pegawai-dashboard',
+      label: 'Dashboard Pegawai',
+      to: '/pegawai-saya/dashboard',
+      icon: 'dashboard',
+      exact: true
+    },
+    {
+      id: 'pegawai-services',
+      label: 'Kepegawaian Saya',
+      to: '/pegawai-saya/biodata',
+      icon: 'pegawai',
+      children: [
+        {
+          id: 'pegawai-biodata',
+          label: 'Biodata',
+          to: '/pegawai-saya/biodata',
+          icon: 'profile',
+          exact: true
+        },
+        {
+          id: 'pegawai-slip',
+          label: 'Slip Gaji',
+          to: '/pegawai-saya/slip-gaji',
+          icon: 'salary'
+        }
+      ]
+    }
+  ],
+  admin_finance: [
+    {
+      id: 'finance-dashboard',
+      label: 'Dashboard Finance',
+      to: '/finance',
+      icon: 'finance',
+      exact: true
+    }
+  ],
+  officer_site: [
+    {
+      id: 'officer-site-dashboard',
+      label: 'Officer Site',
+      to: '/officer-site',
+      icon: 'site',
+      exact: true
+    }
+  ]
+};
+
+const auth = useAuthStore();
+
+const menuItems = computed<MenuItem[]>(() => {
+  const role = auth.state.user?.role;
+  if (!role) return [];
+  return menuByRole[role] ?? [];
+});
 
 const expandedKeys = ref<string[]>([]);
 
@@ -347,7 +448,10 @@ watch(
   (path) => {
     menuItems.value.forEach((item) => {
       if (!item.children) return;
-      const shouldExpand = path.startsWith(item.to ?? '') || item.children.some((child) => path.startsWith(child.to));
+      const parentPath = item.to;
+      const shouldExpand =
+        (parentPath ? path.startsWith(parentPath) : false) ||
+        item.children.some((child) => child.to && path.startsWith(child.to));
       if (shouldExpand) {
         ensureExpanded(item.id);
       }
@@ -356,7 +460,17 @@ watch(
   { immediate: true }
 );
 
-const auth = useAuthStore();
+watch(
+  () => menuItems.value,
+  () => {
+    expandedKeys.value = [];
+    const activeParent = menuItems.value.find((item) => isParentActive(item));
+    if (activeParent && activeParent.children) {
+      ensureExpanded(activeParent.id);
+    }
+  },
+  { immediate: true }
+);
 
 const user = computed(() => auth.state.user);
 

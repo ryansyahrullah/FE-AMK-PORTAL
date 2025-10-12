@@ -1,3 +1,5 @@
+export type UserRole = 'admin_hcgs' | 'pegawai' | 'admin_finance' | 'officer_site';
+
 export interface LoginPayload {
   nrp: string;
   password: string;
@@ -6,8 +8,9 @@ export interface LoginPayload {
 export interface User {
   id: number;
   nama: string;
-  role: 'admin';
+  role: UserRole;
   email?: string;
+  pegawaiId?: number;
 }
 
 export interface AuthResponse {

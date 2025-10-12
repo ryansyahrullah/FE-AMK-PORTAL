@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, reactive } from 'vue';
 import http from '../api/http';
-import type { AuthResponse, LoginPayload, User } from '../types';
+import type { AuthResponse, LoginPayload, User, UserRole } from '../types';
 
 interface AuthState {
   user: User | null;
@@ -12,6 +12,13 @@ interface AuthState {
 
 const storageKeyToken = 'amk_token';
 const storageKeyUser = 'amk_user';
+
+const roleHomeRoute: Record<UserRole, string> = {
+  admin_hcgs: '/dashboard',
+  pegawai: '/pegawai-saya/dashboard',
+  admin_finance: '/finance',
+  officer_site: '/officer-site'
+};
 
 export const useAuthStore = defineStore('auth', () => {
   const state = reactive<AuthState>({
@@ -37,6 +44,22 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const isAuthenticated = computed(() => Boolean(state.token));
+
+  const defaultRoute = computed(() => {
+    const role = state.user?.role;
+    if (!role) {
+      return '/login';
+    }
+    return roleHomeRoute[role] ?? '/dashboard';
+  });
+
+  const hasRole = (roles?: UserRole[]) => {
+    if (!roles || roles.length === 0) return true;
+    const role = state.user?.role;
+    return role ? roles.includes(role) : false;
+  };
+
+  const getDefaultRoute = () => defaultRoute.value;
 
   const login = async (payload: LoginPayload) => {
     state.loading = true;
@@ -78,7 +101,10 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     state,
     isAuthenticated,
+    defaultRoute,
+    hasRole,
     login,
-    logout
+    logout,
+    getDefaultRoute
   };
 });

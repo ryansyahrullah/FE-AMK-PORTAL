@@ -23,7 +23,7 @@
       <div class="flex items-center gap-3 rounded-full border border-transparent bg-slate-100 px-3 py-1 dark:bg-slate-800">
         <div class="hidden text-right text-sm lg:block">
           <p class="font-semibold">{{ user?.nama ?? 'Administrator' }}</p>
-          <p class="text-xs text-slate-500 dark:text-slate-400">{{ user?.role ?? 'admin' }}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">{{ roleLabel }}</p>
         </div>
         <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white uppercase">
           {{ inisialUser }}
@@ -37,9 +37,23 @@
 import { computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
 import ThemeToggle from './ThemeToggle.vue';
+import type { UserRole } from '../types';
 
 const auth = useAuthStore();
 const user = computed(() => auth.state.user);
+
+const roleLabelMap: Record<UserRole, string> = {
+  admin_hcgs: 'Admin HCGS',
+  pegawai: 'Pegawai',
+  admin_finance: 'Admin Finance',
+  officer_site: 'Officer Site'
+};
+
+const roleLabel = computed(() => {
+  const role = user.value?.role;
+  if (!role) return 'Pengguna';
+  return roleLabelMap[role] ?? role;
+});
 
 const inisialUser = computed(() => {
   if (!user.value) return 'AD';
