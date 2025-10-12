@@ -1,5 +1,7 @@
 <template>
-  <header class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-6">
+  <header
+    class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur-xl shadow-sm dark:border-slate-800 dark:bg-slate-900/80 sm:px-6"
+  >
     <div class="flex items-center gap-3">
       <button
         type="button"
@@ -16,14 +18,8 @@
       </div>
     </div>
     <div class="flex items-center gap-4">
-      <button
-        type="button"
-        class="hidden rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 lg:inline-flex"
-        @click="toggleTheme"
-      >
-        <span v-if="isDark">Mode Terang</span>
-        <span v-else>Mode Gelap</span>
-      </button>
+      <ThemeToggle :compact="true" class="hidden lg:inline-flex" />
+      <ThemeToggle :compact="true" class="lg:hidden" />
       <div class="flex items-center gap-3 rounded-full border border-transparent bg-slate-100 px-3 py-1 dark:bg-slate-800">
         <div class="hidden text-right text-sm lg:block">
           <p class="font-semibold">{{ user?.nama ?? 'Administrator' }}</p>
@@ -32,21 +28,15 @@
         <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white uppercase">
           {{ inisialUser }}
         </div>
-        <button
-          type="button"
-          class="ml-2 inline-flex items-center rounded-md border border-transparent bg-primary px-3 py-1 text-sm font-medium text-white shadow-sm transition hover:bg-primary-dark"
-          @click="handleLogout"
-        >
-          Keluar
-        </button>
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
+import ThemeToggle from './ThemeToggle.vue';
 
 const auth = useAuthStore();
 const user = computed(() => auth.state.user);
@@ -61,19 +51,4 @@ const inisialUser = computed(() => {
     .toUpperCase();
 });
 
-const isDark = ref(false);
-
-const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  document.documentElement.classList.toggle('dark', isDark.value);
-};
-
-onMounted(() => {
-  isDark.value = document.documentElement.classList.contains('dark');
-});
-
-const handleLogout = async () => {
-  await auth.logout();
-  window.location.href = '/login';
-};
 </script>
