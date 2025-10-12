@@ -1,47 +1,78 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div
+    v-if="isGuestLayout"
+    class="relative min-h-screen bg-gradient-to-br from-white via-slate-50 to-blue-50 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100"
+  >
+    <div class="pointer-events-none absolute inset-0 overflow-hidden">
+      <div class="absolute -left-32 top-24 h-72 w-72 rounded-full bg-primary/20 blur-[140px]"></div>
+      <div class="absolute bottom-[-10%] right-[-15%] h-[28rem] w-[28rem] rounded-full bg-blue-300/30 blur-[160px]"></div>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="relative z-10">
+      <RouterView />
+    </div>
+  </div>
+  <div
+    v-else
+    class="relative min-h-screen bg-gradient-to-br from-slate-100 via-white to-blue-50 text-slate-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 dark:text-slate-100"
+  >
+    <Sidebar
+      :collapsed="isSidebarCollapsed"
+      :mobile-open="isSidebarOpenMobile"
+      @close-mobile="isSidebarOpenMobile = false"
+      @toggle-collapse="toggleSidebar"
+    />
+    <div :class="['relative min-h-screen transition-[padding] duration-200 ease-out', contentOffsetClass]">
+      <div class="pointer-events-none absolute inset-0 hidden bg-[radial-gradient(circle_at_top,rgba(37,99,235,0.12),transparent_60%)] lg:block"></div>
+      <div class="relative z-10 flex min-h-screen flex-col">
+        <Navbar @toggle-sidebar="handleToggleSidebar" />
+        <main class="flex-1 overflow-y-auto px-4 pb-10 pt-6 sm:px-6 lg:px-10">
+          <RouterView />
+        </main>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { RouterView, useRoute } from 'vue-router';
+import Navbar from './components/Navbar.vue';
+import Sidebar from './components/Sidebar.vue';
+import { useAuthStore } from './stores/auth';
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+const route = useRoute();
+const auth = useAuthStore();
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+const isSidebarCollapsed = ref(false);
+const isSidebarOpenMobile = ref(false);
+
+const isGuestLayout = computed(() => {
+  if (route.meta.layout === 'guest') {
+    return true;
   }
-
-  .logo {
-    margin: 0 2rem 0 0;
+  if (route.meta.layout === 'app') {
+    return false;
   }
+  return !auth.isAuthenticated;
+});
+const contentOffsetClass = computed(() => (isSidebarCollapsed.value ? 'lg:pl-24' : 'lg:pl-72'));
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+const toggleSidebar = () => {
+  isSidebarCollapsed.value = !isSidebarCollapsed.value;
+};
+
+const handleToggleSidebar = () => {
+  if (window.innerWidth < 1024) {
+    isSidebarOpenMobile.value = !isSidebarOpenMobile.value;
+  } else {
+    toggleSidebar();
   }
-}
-</style>
+};
+
+watch(
+  () => route.fullPath,
+  () => {
+    isSidebarOpenMobile.value = false;
+  }
+);
+</script>
