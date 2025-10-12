@@ -36,7 +36,7 @@
           :to="item.to"
           class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition"
           :class="[
-            isRouteActive(item.to)
+            isRouteActive(item.to, item.exact)
               ? 'bg-primary text-white shadow-sm'
               : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
           ]"
@@ -149,7 +149,7 @@
                 :to="child.to"
                 class="group flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-sm transition"
                 :class="[
-                  isRouteActive(child.to)
+                  isRouteActive(child.to, child.exact)
                     ? 'bg-primary/10 text-primary shadow-sm'
                     : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
                 ]"
@@ -231,6 +231,7 @@ interface MenuChild {
   label: string;
   to: string;
   icon: IconName;
+  exact?: boolean;
 }
 
 interface MenuItem {
@@ -239,6 +240,7 @@ interface MenuItem {
   to?: string;
   icon: IconName;
   children?: MenuChild[];
+  exact?: boolean;
 }
 
 type IconName = 'dashboard' | 'pegawai' | 'list' | 'leave' | 'health' | 'contract';
@@ -261,7 +263,8 @@ const menuItems = computed<MenuItem[]>(() => [
     id: 'dashboard',
     label: 'Dashboard',
     to: '/dashboard',
-    icon: 'dashboard'
+    icon: 'dashboard',
+    exact: true
   },
   {
     id: 'pegawai',
@@ -273,7 +276,8 @@ const menuItems = computed<MenuItem[]>(() => [
         id: 'pegawai-data',
         label: 'Data Pegawai',
         to: '/pegawai',
-        icon: 'list'
+        icon: 'list',
+        exact: true
       },
       {
         id: 'pegawai-cuti',
@@ -319,15 +323,18 @@ const toggleExpanded = (id: string) => {
   }
 };
 
-const isRouteActive = (to?: string) => {
+const isRouteActive = (to?: string, exact = false) => {
   if (!to) return false;
   if (route.path === to) return true;
-  return route.path.startsWith(`${to}/`);
+  if (exact) return false;
+  if (route.path.startsWith(`${to}/`)) return true;
+  if (route.path.startsWith(`${to}?`)) return true;
+  return false;
 };
 
 const isParentActive = (item: MenuItem) => {
-  const directActive = isRouteActive(item.to);
-  const childActive = item.children?.some((child) => isRouteActive(child.to)) ?? false;
+  const directActive = isRouteActive(item.to, item.exact);
+  const childActive = item.children?.some((child) => isRouteActive(child.to, child.exact)) ?? false;
   return directActive || childActive;
 };
 
