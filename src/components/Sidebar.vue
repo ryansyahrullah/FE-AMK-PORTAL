@@ -147,7 +147,7 @@
                 v-for="child in item.children"
                 :key="child.id"
                 :to="child.to"
-                class="group flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm transition"
+                class="group flex items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-sm transition"
                 :class="[
                   isRouteActive(child.to)
                     ? 'bg-primary/10 text-primary shadow-sm'
@@ -156,7 +156,7 @@
               >
                 <span class="flex items-center gap-3">
                   <span
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-primary/5 text-primary group-[.bg-primary/10]:bg-white group-[.bg-primary/10]:text-primary"
+                    class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-primary/5 text-primary group-[.bg-primary/10]:bg-white group-[.bg-primary/10]:text-primary"
                   >
                     <svg v-if="child.icon === 'dashboard'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5M3.75 9.75h16.5M3.75 14.25h9M3.75 18.75h9" />
@@ -190,12 +190,6 @@
                     </svg>
                   </span>
                   <span>{{ child.label }}</span>
-                </span>
-                <span
-                  v-if="child.comingSoon"
-                  class="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                >
-                  Segera hadir
                 </span>
               </RouterLink>
             </div>
@@ -237,7 +231,6 @@ interface MenuChild {
   label: string;
   to: string;
   icon: IconName;
-  comingSoon?: boolean;
 }
 
 interface MenuItem {
@@ -272,7 +265,7 @@ const menuItems = computed<MenuItem[]>(() => [
   },
   {
     id: 'pegawai',
-    label: 'Menu Pegawai',
+    label: 'Kepegawaian',
     to: '/pegawai',
     icon: 'pegawai',
     children: [
@@ -286,22 +279,19 @@ const menuItems = computed<MenuItem[]>(() => [
         id: 'pegawai-cuti',
         label: 'Pengajuan Cuti',
         to: '/pegawai/pengajuan-cuti',
-        icon: 'leave',
-        comingSoon: true
+        icon: 'leave'
       },
       {
         id: 'pegawai-mcu',
         label: 'Pengajuan MCU',
         to: '/pegawai/pengajuan-mcu',
-        icon: 'health',
-        comingSoon: true
+        icon: 'health'
       },
       {
         id: 'pegawai-kontrak',
         label: 'Buat Kontrak',
         to: '/pegawai/buat-kontrak',
-        icon: 'contract',
-        comingSoon: true
+        icon: 'contract'
       }
     ]
   }
@@ -343,9 +333,6 @@ const isParentActive = (item: MenuItem) => {
 
 const handleParentClick = (item: MenuItem) => {
   toggleExpanded(item.id);
-  if (item.to) {
-    router.push(item.to).catch(() => undefined);
-  }
 };
 
 watch(
