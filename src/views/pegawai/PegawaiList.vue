@@ -56,7 +56,17 @@
       title="Hapus Pegawai"
       :message="`Apakah Anda yakin ingin menghapus pegawai ${selectedPegawai?.nama_lengkap}? Tindakan ini tidak dapat dibatalkan.`"
       :loading="loadingDelete"
-      @confirm="deletePegawai"
+      @confirm="executeDelete"
+    />
+
+    <ConfirmPasswordDialog
+      v-model="showPasswordConfirm"
+      v-model:password="passwordInput"
+      title="Konfirmasi Penghapusan"
+      message="Untuk menghapus pegawai ini, masukkan kata sandi akun Admin HCGS Anda."
+      :loading="verifyingPassword"
+      :error="passwordError"
+      @confirm="verifyAndDelete"
     />
 
     <Toast
@@ -75,12 +85,15 @@ import AppPagination from '../../components/AppPagination.vue';
 import AppTable from '../../components/AppTable.vue';
 import Button from '../../components/Button.vue';
 import ConfirmDialog from '../../components/ConfirmDialog.vue';
+import ConfirmPasswordDialog from '../../components/ConfirmPasswordDialog.vue';
 import SearchBar from '../../components/SearchBar.vue';
 import Toast from '../../components/Toast.vue';
 import http from '../../api/http';
+import { useAuthStore } from '../../stores/auth';
 import type { PaginatedPegawai, Pegawai } from '../../types';
 
 const router = useRouter();
+const auth = useAuthStore();
 
 const columns = [
   { key: 'nrp', label: 'NRP' },
@@ -106,13 +119,19 @@ const meta = reactive({
 });
 const loading = ref(false);
 const loadingDelete = ref(false);
+const verifyingPassword = ref(false);
 const showConfirm = ref(false);
+const showPasswordConfirm = ref(false);
 const selectedPegawai = ref<Pegawai | null>(null);
 const toast = reactive({
   show: false,
   message: '',
   type: 'info' as 'success' | 'error' | 'info'
 });
+const passwordInput = ref('');
+const passwordError = ref<string | null>(null);
+
+const requiresPasswordConfirmation = computed(() => auth.state.user?.role === 'admin_hcgs');
 
 const totalPages = computed(() => Math.ceil(meta.total / meta.per_page) || 1);
 
@@ -153,22 +172,45 @@ const goToEdit = (id: number) => router.push({ name: 'pegawai-edit', params: { i
 
 const confirmDelete = (item: Pegawai) => {
   selectedPegawai.value = item;
-  showConfirm.value = true;
+  if (requiresPasswordConfirmation.value) {
+    passwordInput.value = '';
+    passwordError.value = null;
+    showPasswordConfirm.value = true;
+  } else {
+    showConfirm.value = true;
+  }
 };
 
-const deletePegawai = async () => {
+const executeDelete = async () => {
   if (!selectedPegawai.value) return;
   loadingDelete.value = true;
   try {
     await http.delete(`/api/pegawai/${selectedPegawai.value.id}`);
     showToast('Pegawai berhasil dihapus.', 'success');
     showConfirm.value = false;
+    showPasswordConfirm.value = false;
+    selectedPegawai.value = null;
     fetchPegawai();
   } catch (error) {
     console.error('Gagal menghapus pegawai', error);
     showToast('Terjadi kesalahan saat menghapus pegawai.', 'error');
   } finally {
     loadingDelete.value = false;
+  }
+};
+
+const verifyAndDelete = async () => {
+  if (!selectedPegawai.value) return;
+  passwordError.value = null;
+  verifyingPassword.value = true;
+  try {
+    await auth.verifyPassword(passwordInput.value);
+    await executeDelete();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Kata sandi tidak sesuai.';
+    passwordError.value = message;
+  } finally {
+    verifyingPassword.value = false;
   }
 };
 
@@ -190,6 +232,16 @@ watch(
   () => filters.page,
   () => {
     fetchPegawai();
+  }
+);
+
+watch(
+  () => showPasswordConfirm.value,
+  (open) => {
+    if (!open) {
+      passwordInput.value = '';
+      passwordError.value = null;
+    }
   }
 );
 

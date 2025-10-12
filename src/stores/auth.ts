@@ -105,6 +105,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
+  const verifyPassword = async (password: string) => {
+    if (!password || password.trim().length === 0) {
+      throw new Error('Kata sandi wajib diisi.');
+    }
+
+    try {
+      await http.post<{ valid: boolean }>('/api/auth/verify-password', {
+        password: password.trim()
+      });
+      return true;
+    } catch (error: unknown) {
+      let message = 'Kata sandi tidak sesuai.';
+      if (isAxiosError(error)) {
+        const serverMessage = (error.response?.data as { message?: string } | undefined)?.message;
+        if (typeof serverMessage === 'string' && serverMessage.trim().length > 0) {
+          message = serverMessage;
+        }
+      }
+      throw new Error(message);
+    }
+  };
+
   return {
     state,
     isAuthenticated,
@@ -112,6 +134,7 @@ export const useAuthStore = defineStore('auth', () => {
     hasRole,
     login,
     logout,
-    getDefaultRoute
+    getDefaultRoute,
+    verifyPassword
   };
 });

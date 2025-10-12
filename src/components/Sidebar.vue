@@ -242,7 +242,7 @@
       <button
         type="button"
         class="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:border-red-400 hover:bg-red-50 hover:text-red-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-red-400/60 dark:hover:bg-red-500/10 dark:hover:text-red-300"
-        @click="handleLogout"
+        @click="handleLogoutClick"
       >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
@@ -250,6 +250,13 @@
         <span v-if="!collapsed">Keluar</span>
       </button>
     </div>
+    <ConfirmDialog
+      v-model="showLogoutConfirm"
+      title="Keluar dari Portal"
+      message="Apakah Anda yakin ingin keluar dari portal?"
+      :loading="logoutLoading"
+      @confirm="confirmLogout"
+    />
   </aside>
 </template>
 
@@ -257,6 +264,7 @@
 import { computed, ref, watch } from 'vue';
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
+import ConfirmDialog from './ConfirmDialog.vue';
 import type { UserRole } from '../types';
 
 interface MenuChild {
@@ -300,6 +308,8 @@ const router = useRouter();
 
 const mobileOpen = computed(() => props.mobileOpen);
 const collapsed = computed(() => props.collapsed);
+const showLogoutConfirm = ref(false);
+const logoutLoading = ref(false);
 
 const menuByRole: Record<UserRole, MenuItem[]> = {
   admin_hcgs: [
@@ -484,9 +494,19 @@ const inisialUser = computed(() => {
     .toUpperCase();
 });
 
-const handleLogout = async () => {
-  await auth.logout();
-  router.replace({ name: 'login' });
+const handleLogoutClick = () => {
+  showLogoutConfirm.value = true;
+};
+
+const confirmLogout = async () => {
+  logoutLoading.value = true;
+  try {
+    await auth.logout();
+    showLogoutConfirm.value = false;
+    router.replace({ name: 'login' });
+  } finally {
+    logoutLoading.value = false;
+  }
 };
 </script>
 

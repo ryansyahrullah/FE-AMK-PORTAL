@@ -189,6 +189,29 @@ export const initMockServer = (http: AxiosInstance) => {
     return [204];
   });
 
+  mock.onPost('/api/auth/verify-password').reply((config: AxiosRequestConfig) => {
+    const guard = requireAuth(config, ['admin_hcgs']);
+    if (!guard.ok) return guard.response;
+
+    const payload = JSON.parse(config.data ?? '{}');
+    const password = String(payload.password ?? '').trim();
+
+    if (!password) {
+      return [422, { message: 'Kata sandi wajib diisi.' }];
+    }
+
+    const credential = credentials.find((cred) => cred.user.id === guard.session.user.id);
+    if (!credential) {
+      return [404, { message: 'Akun tidak ditemukan.' }];
+    }
+
+    if (credential.password !== password) {
+      return [401, { message: 'Kata sandi tidak sesuai.' }];
+    }
+
+    return [200, { valid: true }];
+  });
+
   mock.onGet('/api/profil').reply((config: AxiosRequestConfig) => {
     const guard = requireAuth(config);
     if (!guard.ok) return guard.response;
